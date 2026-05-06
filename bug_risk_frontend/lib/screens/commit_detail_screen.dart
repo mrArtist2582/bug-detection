@@ -47,7 +47,10 @@ class _CommitDetailScreenState extends State<CommitDetailScreen> {
       setState(() { _testCases = cases; _suggestionsLoaded = true; });
     } catch (e) {
       debugPrint('SUGGESTIONS_ERROR: $e');
-      setState(() => _suggestionsError = e.toString().replaceAll('Exception: ', ''));
+      final msg = e.toString().contains('429')
+          ? 'AI quota exceeded. Please try again in a few minutes.'
+          : e.toString().replaceAll('Exception: ', '');
+      setState(() => _suggestionsError = msg);
     } finally {
       setState(() => _loadingSuggestions = false);
     }
