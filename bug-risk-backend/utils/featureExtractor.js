@@ -32,7 +32,10 @@ module.exports = async function extractFeatures(payload) {
   const moduleName = commits[0]?.modified[0]?.split("/")[0] || "core";
 
   return {
-    module: moduleName,
+    repo_name:     repoFullName || "unknown",
+    commit_sha:    commits[0]?.id || null,
+    pushed_by:     payload.pusher?.name || null,
+    module:        moduleName,
     files_changed: filesChanged,
     lines_added:   linesAdded,
     lines_removed: linesRemoved,

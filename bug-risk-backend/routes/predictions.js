@@ -2,11 +2,13 @@ const express = require("express");
 const Prediction = require("../models/Prediction");
 const router = express.Router();
 
-// GET /predictions?limit=50
+// GET /predictions?repo=owner/repo&limit=50
 router.get("/", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 50;
-    const predictions = await Prediction.find()
+    const filter = {};
+    if (req.query.repo) filter.repo_name = req.query.repo;
+    const predictions = await Prediction.find(filter)
       .sort({ timestamp: -1 })
       .limit(limit);
     res.json(predictions);
