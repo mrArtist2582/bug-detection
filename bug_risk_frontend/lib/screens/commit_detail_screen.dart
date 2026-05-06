@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/prediction_model.dart';
 import '../services/api_service.dart';
+import '../services/auth_service.dart';
 
 class CommitDetailScreen extends StatefulWidget {
   final Prediction prediction;
@@ -34,10 +35,18 @@ class _CommitDetailScreenState extends State<CommitDetailScreen> {
     }
     setState(() { _loadingSuggestions = true; _suggestionsError = null; });
     try {
+      final token = await AuthService.getIdToken();
+      debugPrint('FIREBASE_TOKEN: $token');
       final result = await ApiService.getSuggestions(p.commitSha);
+      debugPrint('SUGGESTIONS_RESULT: $result');
       final cases = List<Map<String, dynamic>>.from(result['test_cases'] ?? []);
+      if (cases.isEmpty) {
+        setState(() => _suggestionsError = result['error'] ?? 'No test cases returned');
+        return;
+      }
       setState(() { _testCases = cases; _suggestionsLoaded = true; });
     } catch (e) {
+      debugPrint('SUGGESTIONS_ERROR: $e');
       setState(() => _suggestionsError = e.toString().replaceAll('Exception: ', ''));
     } finally {
       setState(() => _loadingSuggestions = false);
