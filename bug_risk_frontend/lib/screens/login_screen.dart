@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
@@ -61,9 +63,10 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         Navigator.pushReplacement(context, _route(const RepoConnectScreen()));
       }
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       setState(() => _error = _friendlyError(e.code));
     } finally {
-      setState(() => _loading = false);
+      if (mounted) setState(() => _loading = false);
     }
   }
 

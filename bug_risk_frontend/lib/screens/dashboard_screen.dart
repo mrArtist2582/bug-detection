@@ -1,9 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import '../models/prediction_model.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../widgets/glitch_text.dart';
 import 'login_screen.dart';
+import 'charts_screen.dart';
+import 'commit_detail_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String repo;
@@ -88,6 +92,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    const SizedBox(height: 24),
+                                    const Text('OVERVIEW', style: TextStyle(color: Color(0xFF484F58), fontSize: 10, letterSpacing: 3)),
+                                    const SizedBox(height: 10),
                                     isWide
                                         ? Row(children: [
                                             _summaryCard('HIGH RISK', high, const Color(0xFFFF4444)),
@@ -111,12 +118,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               _summaryCard('TOTAL', _predictions.length, const Color(0xFF58A6FF)),
                                             ]),
                                           ]),
-                                    const SizedBox(height: 24),
+                                    const SizedBox(height: 28),
+                                    const Text('FILTER BY RISK', style: TextStyle(color: Color(0xFF484F58), fontSize: 10, letterSpacing: 3)),
+                                    const SizedBox(height: 10),
                                     _filterRow(),
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      '> ${_filtered.length} RECORDS FOUND',
-                                      style: const TextStyle(color: Color(0xFF00FF41), fontSize: 12, letterSpacing: 1),
+                                    const SizedBox(height: 16),
+                                    Row(
+                                      children: [
+                                        const Text('COMMIT RECORDS', style: TextStyle(color: Color(0xFF484F58), fontSize: 10, letterSpacing: 3)),
+                                        const SizedBox(width: 10),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF00FF41).withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(2),
+                                            border: Border.all(color: const Color(0xFF00FF41).withOpacity(0.3)),
+                                          ),
+                                          child: Text(
+                                            '${_filtered.length}',
+                                            style: const TextStyle(color: Color(0xFF00FF41), fontSize: 10, fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -124,15 +147,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                             SliverPadding(
                               padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
-                              sliver: SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (ctx, i) => Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
-                                    child: _predictionCard(_filtered[i]),
-                                  ),
-                                  childCount: _filtered.length,
-                                ),
-                              ),
+                              sliver: isWide
+                                  ? SliverGrid(
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 12,
+                                        mainAxisSpacing: 12,
+                                        mainAxisExtent: 200,
+                                      ),
+                                      delegate: SliverChildBuilderDelegate(
+                                        (ctx, i) => GestureDetector(
+                                          onTap: () => Navigator.push(context, PageRouteBuilder(
+                                            pageBuilder: (_, __, ___) => CommitDetailScreen(prediction: _filtered[i]),
+                                            transitionDuration: Duration.zero,
+                                          )),
+                                          child: _predictionCard(_filtered[i]),
+                                        ),
+                                        childCount: _filtered.length,
+                                      ),
+                                    )
+                                  : SliverGrid(
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 1,
+                                        mainAxisSpacing: 12,
+                                        mainAxisExtent: 200,
+                                      ),
+                                      delegate: SliverChildBuilderDelegate(
+                                        (ctx, i) => GestureDetector(
+                                          onTap: () => Navigator.push(context, PageRouteBuilder(
+                                            pageBuilder: (_, __, ___) => CommitDetailScreen(prediction: _filtered[i]),
+                                            transitionDuration: Duration.zero,
+                                          )),
+                                          child: _predictionCard(_filtered[i]),
+                                        ),
+                                        childCount: _filtered.length,
+                                      ),
+                                    ),
                             ),
                             const SliverToBoxAdapter(child: SizedBox(height: 32)),
                           ],
@@ -167,6 +217,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.bar_chart, color: Color(0xFF00FF41), size: 20),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => ChartsScreen(predictions: _predictions),
+                transitionDuration: Duration.zero,
+              ),
+            ),
+            tooltip: 'Analytics',
           ),
           IconButton(
             icon: const Icon(Icons.refresh, color: Color(0xFF8B949E), size: 20),
@@ -252,64 +313,80 @@ class _DashboardScreenState extends State<DashboardScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFF0D1117),
         borderRadius: BorderRadius.circular(4),
-        border: Border(
-          left: BorderSide(color: color, width: 3),
-          top: BorderSide(color: const Color(0xFF161B22)),
-          right: BorderSide(color: const Color(0xFF161B22)),
-          bottom: BorderSide(color: const Color(0xFF161B22)),
-        ),
+        border: Border.all(color: const Color(0xFF161B22)),
         boxShadow: [BoxShadow(color: color.withOpacity(0.04), blurRadius: 12)],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  p.module,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
-                  overflow: TextOverflow.ellipsis,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(width: 3, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(2))),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            p.module,
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: color.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(2),
+                            border: Border.all(color: color.withOpacity(0.5)),
+                          ),
+                          child: Text(
+                            p.riskLevel.toUpperCase(),
+                            style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 1),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    _riskBar(p.riskScore, color),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 6,
+                      children: [
+                        _chip(Icons.insert_drive_file_outlined, '${p.filesChanged} FILES', const Color(0xFF8B949E)),
+                        _chip(Icons.add_circle_outline, '+${p.linesAdded} ADDED', const Color(0xFF00FF41)),
+                        _chip(Icons.remove_circle_outline, '-${p.linesRemoved} REMOVED', const Color(0xFFFF4444)),
+                        _chip(Icons.verified_outlined, '${(p.confidence * 100).toStringAsFixed(0)}% CONF', const Color(0xFF58A6FF)),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          const Icon(Icons.person_outline, size: 11, color: Color(0xFF58A6FF)),
+                          const SizedBox(width: 4),
+                          Text('${p.pushedBy}', style: const TextStyle(color: Color(0xFF58A6FF), fontSize: 11)),
+                        ]),
+                        Row(children: [
+                          const Icon(Icons.access_time, size: 11, color: Color(0xFF484F58)),
+                          const SizedBox(width: 4),
+                          Text(_formatDate(p.timestamp), style: const TextStyle(color: Color(0xFF484F58), fontSize: 10)),
+                        ]),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(2),
-                  border: Border.all(color: color.withOpacity(0.5)),
-                ),
-                child: Text(
-                  p.riskLevel.toUpperCase(),
-                  style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 1),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          _riskBar(p.riskScore, color),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 12,
-            runSpacing: 6,
-            children: [
-              _chip(Icons.insert_drive_file_outlined, '${p.filesChanged} files', const Color(0xFF8B949E)),
-              _chip(Icons.add, '+${p.linesAdded}', const Color(0xFF00FF41)),
-              _chip(Icons.remove, '-${p.linesRemoved}', const Color(0xFFFF4444)),
-              _chip(Icons.percent, '${(p.confidence * 100).toStringAsFixed(0)}%', const Color(0xFF58A6FF)),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('by ${p.pushedBy}', style: const TextStyle(color: Color(0xFF58A6FF), fontSize: 11)),
-              Text(_formatDate(p.timestamp), style: const TextStyle(color: Color(0xFF484F58), fontSize: 10)),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

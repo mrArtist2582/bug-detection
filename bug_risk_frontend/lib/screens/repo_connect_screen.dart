@@ -73,6 +73,7 @@ class _RepoConnectScreenState extends State<RepoConnectScreen> {
                 decoration: BoxDecoration(
                   color: const Color(0xFF0D1117),
                   borderRadius: BorderRadius.circular(4),
+                  // ignore: deprecated_member_use
                   border: Border.all(color: const Color(0xFF00FF41).withOpacity(0.3)),
                 ),
                 child: Column(
