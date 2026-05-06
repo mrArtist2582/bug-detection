@@ -7,6 +7,7 @@ const webhookRoute = require("./routes/webhook");
 const setupWebhookRoute = require("./routes/setupWebhook");
 const predictionsRoute = require("./routes/predictions");
 const authRoute = require("./routes/auth");
+const suggestionsRoute = require("./routes/suggestions");
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(cors());
 
 app.use("/auth", authRoute);
+app.use("/suggestions", suggestionsRoute);
 app.use("/webhook", webhookRoute);
 app.use("/setup-webhook", setupWebhookRoute);
 app.use("/predictions", predictionsRoute);

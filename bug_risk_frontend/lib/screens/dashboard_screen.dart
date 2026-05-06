@@ -124,28 +124,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                             SliverPadding(
                               padding: EdgeInsets.symmetric(horizontal: isWide ? 24 : 16),
-                              sliver: isWide
-                                  ? SliverGrid(
-                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 16,
-                                        mainAxisSpacing: 16,
-                                        childAspectRatio: 2.2,
-                                      ),
-                                      delegate: SliverChildBuilderDelegate(
-                                        (ctx, i) => _predictionCard(_filtered[i]),
-                                        childCount: _filtered.length,
-                                      ),
-                                    )
-                                  : SliverList(
-                                      delegate: SliverChildBuilderDelegate(
-                                        (ctx, i) => Padding(
-                                          padding: const EdgeInsets.only(bottom: 12),
-                                          child: _predictionCard(_filtered[i]),
-                                        ),
-                                        childCount: _filtered.length,
-                                      ),
-                                    ),
+                              sliver: SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  (ctx, i) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: _predictionCard(_filtered[i]),
+                                  ),
+                                  childCount: _filtered.length,
+                                ),
+                              ),
                             ),
                             const SliverToBoxAdapter(child: SizedBox(height: 32)),
                           ],
