@@ -9,10 +9,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // GET /suggestions/:commitSha
 router.get("/:commitSha", authMiddleware, async (req, res) => {
   try {
-    const prediction = await Prediction.findOne({
-      commit_sha: req.params.commitSha,
-      uid: req.uid,
-    }) || await Prediction.findOne({ commit_sha: req.params.commitSha });
+    const prediction = await Prediction.findOne({ commit_sha: req.params.commitSha });
 
     if (!prediction) {
       return res.status(404).json({ error: "Prediction not found" });
