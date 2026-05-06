@@ -1,14 +1,13 @@
 const express = require("express");
-const Prediction = require("../models/Prediction");
 const router = express.Router();
+const Prediction = require("../models/Prediction");
+const authMiddleware = require("../middleware/auth");
 
-// GET /predictions?repo=owner/repo&limit=50
-router.get("/", async (req, res) => {
+// GET /predictions?limit=50
+router.get("/", authMiddleware, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 50;
-    const filter = {};
-    if (req.query.repo) filter.repo_name = req.query.repo;
-    const predictions = await Prediction.find(filter)
+    const predictions = await Prediction.find({ uid: req.uid })
       .sort({ timestamp: -1 })
       .limit(limit);
     res.json(predictions);
@@ -18,9 +17,9 @@ router.get("/", async (req, res) => {
 });
 
 // GET /predictions/:id
-router.get("/:id", async (req, res) => {
+router.get("/:id", authMiddleware, async (req, res) => {
   try {
-    const prediction = await Prediction.findById(req.params.id);
+    const prediction = await Prediction.findOne({ _id: req.params.id, uid: req.uid });
     if (!prediction) return res.status(404).json({ error: "Not found" });
     res.json(prediction);
   } catch (err) {
@@ -29,9 +28,9 @@ router.get("/:id", async (req, res) => {
 });
 
 // DELETE /predictions/:id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
   try {
-    await Prediction.findByIdAndDelete(req.params.id);
+    await Prediction.findOneAndDelete({ _id: req.params.id, uid: req.uid });
     res.json({ message: "Deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });

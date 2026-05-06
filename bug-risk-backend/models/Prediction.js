@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const predictionSchema = new mongoose.Schema({
+  uid:           { type: String, index: true },
   repo_name:     { type: String, index: true },
   commit_sha:    String,
   pushed_by:     String,
