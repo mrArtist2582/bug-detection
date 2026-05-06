@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "743090792850",
+    "project_id": "ai-based-bug-detection",
+    "storage_bucket": "ai-based-bug-detection.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743090792850:android:9f05c943a24a44681e794b",
+        "android_client_info": {
+          "package_name": "com.bugrisk.bug_risk_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVwEaa9LelLeViiwmKrqYAEB8vHACupt4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
