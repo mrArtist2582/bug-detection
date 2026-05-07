@@ -25,6 +25,7 @@ class GlitchText extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
+              // ignore: deprecated_member_use
               color: const Color(0xFF00FFFF).withOpacity(0.15),
               letterSpacing: 3,
             ),
