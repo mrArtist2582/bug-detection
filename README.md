@@ -49,6 +49,9 @@ It helps developers identify vulnerable areas in projects and improve software q
 ## Risk Analysis
 ![Risk Analysis](assets/risk-analysis.png)
 
+## Demo video
+![Demo](https://drive.google.com/file/d/1gCTfTC0x4RUnDpB6YJdu0om46zlKM0R4/view?usp=sharing)
+
 ---
 
 # 🚀 Features
