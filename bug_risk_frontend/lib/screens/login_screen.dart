@@ -157,7 +157,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
             border: Border.all(color: const Color(0xFF00FF41), width: 2),
             boxShadow: [BoxShadow(color: const Color(0xFF00FF41).withOpacity(0.3), blurRadius: 20)],
           ),
-          child: const Icon(Icons.bug_report, size: 36, color: Color(0xFF00FF41)),
+          child: ClipOval(
+            child: Image.asset('assets/logo.png', fit: BoxFit.cover),
+          ),
         ),
         const SizedBox(height: 16),
         const GlitchText('BUG RISK ANALYZER', fontSize: 24),

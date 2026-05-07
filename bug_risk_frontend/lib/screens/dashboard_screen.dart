@@ -203,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.bug_report, color: Color(0xFF00FF41), size: 22),
+          Image.asset('assets/logo.png', width: 28, height: 28),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
