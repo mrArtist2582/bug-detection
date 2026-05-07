@@ -158,7 +158,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       delegate: SliverChildBuilderDelegate(
                                         (ctx, i) => GestureDetector(
                                           onTap: () => Navigator.push(context, PageRouteBuilder(
-                                            pageBuilder: (_, __, ___) => CommitDetailScreen(prediction: _filtered[i]),
+                                            pageBuilder: (_, _, _) => CommitDetailScreen(prediction: _filtered[i]),
                                             transitionDuration: Duration.zero,
                                           )),
                                           child: _predictionCard(_filtered[i]),
@@ -175,7 +175,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       delegate: SliverChildBuilderDelegate(
                                         (ctx, i) => GestureDetector(
                                           onTap: () => Navigator.push(context, PageRouteBuilder(
-                                            pageBuilder: (_, __, ___) => CommitDetailScreen(prediction: _filtered[i]),
+                                            pageBuilder: (_, _, _) => CommitDetailScreen(prediction: _filtered[i]),
                                             transitionDuration: Duration.zero,
                                           )),
                                           child: _predictionCard(_filtered[i]),
@@ -223,7 +223,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: () => Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (_, __, ___) => ChartsScreen(predictions: _predictions),
+                pageBuilder: (_, _, _) => ChartsScreen(predictions: _predictions),
                 transitionDuration: Duration.zero,
               ),
             ),
@@ -372,7 +372,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Row(children: [
                           const Icon(Icons.person_outline, size: 11, color: Color(0xFF58A6FF)),
                           const SizedBox(width: 4),
-                          Text('${p.pushedBy}', style: const TextStyle(color: Color(0xFF58A6FF), fontSize: 11)),
+                          Text(p.pushedBy, style: const TextStyle(color: Color(0xFF58A6FF), fontSize: 11)),
                         ]),
                         Row(children: [
                           const Icon(Icons.access_time, size: 11, color: Color(0xFF484F58)),

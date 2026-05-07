@@ -119,7 +119,7 @@ class _ChartsScreenState extends State<ChartsScreen> with SingleTickerProviderSt
               barWidth: 2,
               dotData: FlDotData(
                 show: true,
-                getDotPainter: (spot, _, __, ___) {
+                getDotPainter: (spot, _, _, _) {
                   final color = spot.y >= 0.7
                       ? const Color(0xFFFF4444)
                       : spot.y >= 0.4
@@ -211,7 +211,7 @@ class _ChartsScreenState extends State<ChartsScreen> with SingleTickerProviderSt
           barTouchData: BarTouchData(
             touchTooltipData: BarTouchTooltipData(
               getTooltipColor: (_) => const Color(0xFF161B22),
-              getTooltipItem: (group, _, rod, __) {
+              getTooltipItem: (group, _, rod, _) {
                 const labels = ['High', 'Medium', 'Low'];
                 return BarTooltipItem(
                   '${labels[group.x]}\n${rod.toY.toInt()} commits',
